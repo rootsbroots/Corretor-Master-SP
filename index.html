@@ -1157,7 +1157,7 @@ function gmsg0(t){$("g-msg").innerHTML=`<div class="alert crit">${esc(t)}</div>`
 let EMAIL=null;
 const gmsg=(k,t)=>{$("g-msg").innerHTML=t?`<div class="alert ${k}">${esc(t)}</div>`:""};
 let CARGA=null;
-async function carregar(){const c=await api({acao:"catalogo"});ESTADOS=(c.estados||ESTADOS).filter(e=>e.s==="sp");CIDADES=c.cidades.filter(x=>x.uf==="sp");const _cs=CIDADES.map(x=>x.s);BAIRROS=c.bairros.filter(b=>_cs.includes(b.cid));CONDOS=c.condos;PARQUES=c.parques.filter(p=>_cs.includes(p.cid||p[2]));PRONTO=true;fillSelects();syncInputs();render();recentes()}
+async function carregar(){const c=await api({acao:"catalogo"});ESTADOS=(c.estados||ESTADOS).filter(e=>e.s==="sp");CIDADES=c.cidades.filter(x=>x.uf==="sp");if(!CIDADES.length)throw new Error("servidor sem São Paulo: atualize a função smart-endpoint para a v1.58");const _cs=CIDADES.map(x=>x.s);BAIRROS=c.bairros.filter(b=>_cs.includes(b.cid));CONDOS=c.condos;PARQUES=c.parques.filter(p=>_cs.includes(p.cid||p[2]));PRONTO=true;fillSelects();syncInputs();render();recentes()}
 function limparDados(){GER=null;CALCOK="";ENT=null;ENTLOC=null;CONV_EDIT=false;REG=null;REGC={};PRONTO=false;CARGA=null;ESTADOS=[{s:"sp",n:"São Paulo",uf:"SP"}];CIDADES=[{n:"São Paulo",s:"sao-paulo",uf:"sp"}];BAIRROS=[];CONDOS={};PARQUES=[];LS=[]}
 function mostrarGate(){limparDados();marcaDagua("");$("app").hidden=true;$("gate").hidden=false;$("sair").hidden=true;$("g-form").hidden=false;$("g-code").hidden=true}
 async function logUso(acao){if(!EMAIL)return;try{await sb.from("uso").insert({email:EMAIL,acao})}catch(_){}}
